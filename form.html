@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact Us - Blessing Gideon</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+  <main class="w-full max-w-lg bg-white shadow-lg rounded-2xl p-8" data-testid="test-contact-page">
+    <h1 class="text-2xl font-semibold text-blue-900 mb-4 text-center">Contact Us</h1>
+
+    <form id="contact-form" novalidate class="space-y-4" aria-describedby="form-description">
+      <p id="form-description" class="text-sm text-slate-600 mb-4">All fields are required.</p>
+      <div>
+        <label for="contact-name" class="block text-sm font-medium text-blue-900">Full Name</label>
+        <input id="contact-name" data-testid="test-contact-name" name="name" type="text"
+               class="w-full border rounded-md p-2 focus:ring-2" required />
+        <p id="error-name" data-testid="test-contact-error-name" class="text-red-600 text-xs mt-1 hidden"></p>
+      </div>
+      <div>
+        <label for="contact-email" class="block text-sm font-medium text-blue-900">Email</label>
+        <input id="contact-email" data-testid="test-contact-email" name="email" type="email"
+               class="w-full border rounded-md p-2 focus:ring-2" required />
+        <p id="error-email" data-testid="test-contact-error-email" class="text-red-600 text-xs mt-1 hidden"></p>
+      </div>
+      <div>
+        <label for="contact-subject" class="block text-sm font-medium text-blue-900">Subject</label>
+        <input id="contact-subject" data-testid="test-contact-subject" name="subject" type="text"
+               class="w-full border rounded-md p-2 focus:ring-2" required />
+        <p id="error-subject" data-testid="test-contact-error-subject" class="text-red-600 text-xs mt-1 hidden"></p>
+      </div>
+      <div>
+        <label for="contact-message" class="block text-sm font-medium text-blue-900">Message</label>
+        <textarea id="contact-message" data-testid="test-contact-message" name="message" rows="4"
+                  class="w-full border rounded-md p-2 focus:ring-2" required></textarea>
+        <p id="error-message" data-testid="test-contact-error-message" class="text-red-600 text-xs mt-1 hidden"></p>
+      </div>
+      <button type="submit" data-testid="test-contact-submit"
+              class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:ring-2">
+        Submit
+      </button>
+
+      <p id="success-message" data-testid="test-contact-success"
+         class="text-green-600 text-sm mt-4 text-center hidden">
+         Thank you! Your message has been submitted successfully.
+      </p>
+    </form>
+
+    <div class="mt-6 text-center">
+      <a href="index.html" class="text-blue-600 underline text-sm hover:text-blue-800">← Back to Profile</a>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('contact-form');
+    const successMsg = document.getElementById('success-message');
+
+    const fields = {
+      name: document.getElementById('contact-name'),
+      email: document.getElementById('contact-email'),
+      subject: document.getElementById('contact-subject'),
+      message: document.getElementById('contact-message')
+    };
+
+    const errors = {
+      name: document.getElementById('error-name'),
+      email: document.getElementById('error-email'),
+      subject: document.getElementById('error-subject'),
+      message: document.getElementById('error-message')
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let valid = true;
+
+      Object.values(errors).forEach(err => { err.textContent = ''; err.classList.add('hidden'); });
+
+      if (!fields.name.value.trim()) {
+        errors.name.textContent = 'Full name is required.';
+        errors.name.classList.remove('hidden');
+        valid = false;
+      }
+
+      const emailVal = fields.email.value.trim();
+      if (!emailVal) {
+        errors.email.textContent = 'Email is required.';
+        errors.email.classList.remove('hidden');
+        valid = false;
+      } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(emailVal)) {
+        errors.email.textContent = 'Please enter a valid email (name@example.com).';
+        errors.email.classList.remove('hidden');
+        valid = false;
+      }
+
+      if (!fields.subject.value.trim()) {
+        errors.subject.textContent = 'Subject is required.';
+        errors.subject.classList.remove('hidden');
+        valid = false;
+      }
+
+      const messageVal = fields.message.value.trim();
+      if (!messageVal) {
+        errors.message.textContent = 'Message is required.';
+        errors.message.classList.remove('hidden');
+        valid = false;
+      } else if (messageVal.length < 10) {
+        errors.message.textContent = 'Message must be at least 10 characters.';
+        errors.message.classList.remove('hidden');
+        valid = false;
+      }
+
+      if (valid) {
+        successMsg.classList.remove('hidden');
+        form.reset();
+      } else {
+        successMsg.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
